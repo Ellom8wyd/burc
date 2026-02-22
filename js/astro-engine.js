@@ -377,6 +377,40 @@ const AstroEngine = (() => {
     // Chiron (basitleştirilmiş)
     results.chiron = calcChiron(T);
 
+    // Retro tespiti: T+1 gün'deki pozisyonlarla karşılaştır
+    const dT = 1 / 36525; // ~1 gün ileri
+    const futureEarth = calcPlanetPosition('earth', T + dT);
+    const retroPlanets = ['mercury','venus','mars','jupiter','saturn','uranus','neptune'];
+    for (const name of retroPlanets) {
+      const futP = calcPlanetPosition(name, T + dT);
+      if (!futP || !futureEarth) continue;
+      const planetEl = ORBITAL_ELEMENTS[name];
+      const a = planetEl.a;
+      const eR = ORBITAL_ELEMENTS.earth.a;
+      const pLon = futP.helioLon * DEG;
+      const eLon = futureEarth.helioLon * DEG;
+      const x = a * Math.cos(pLon) - eR * Math.cos(eLon);
+      const y = a * Math.sin(pLon) - eR * Math.sin(eLon);
+      const futGeoLon = normalize(Math.atan2(y, x) * RAD);
+      let diff = futGeoLon - results[name].longitude;
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
+      results[name].retrograde = diff < 0;
+    }
+    // Plüton retro
+    const futPluto = calcPluto(T + dT);
+    if (futPluto && results.pluto) {
+      let pDiff = futPluto.longitude - results.pluto.longitude;
+      if (pDiff > 180) pDiff -= 360;
+      if (pDiff < -180) pDiff += 360;
+      results.pluto.retrograde = pDiff < 0;
+    }
+    // Güneş ve Ay asla retro olmaz
+    results.sun.retrograde = false;
+    results.moon.retrograde = false;
+    if (results.node) results.node.retrograde = false;
+    if (results.chiron) results.chiron.retrograde = false;
+
     return results;
   }
 
@@ -695,7 +729,9 @@ const AstroEngine = (() => {
     PLANETS,
     ASPECTS,
     normalize,
-    getPlanetInfo
+    getPlanetInfo,
+    dateToJD,
+    jdToT
   };
 
 })();

@@ -444,7 +444,7 @@ const ChartRenderer = (() => {
   function renderInfoPanel(container, chartData) {
     container.innerHTML = '';
 
-    // Gezegen tablosu
+    // PANEL 1: Gezegen tablosu
     const planetSection = createSection('Gezegen Pozisyonları', 'planet-positions');
     const planetTable = document.createElement('div');
     planetTable.className = 'planet-table';
@@ -466,16 +466,9 @@ const ChartRenderer = (() => {
     planetSection.appendChild(planetTable);
     container.appendChild(planetSection);
 
-    // Evler + Açılar + Analiz: Yan yana 2-sütun
-    const dualRow = document.createElement('div');
-    dualRow.className = 'info-dual-row';
+    // PANEL 2: Evler + Analiz (tek bölüm)
+    const housesAnalysisSection = createSection('Evler & Analiz', 'houses-analysis');
 
-    // SOL: Evler + Analiz
-    const leftCol = document.createElement('div');
-    leftCol.className = 'info-dual-col';
-
-    // Ev tablosu
-    const houseSection = createSection('Ev Başlangıçları', 'house-cusps');
     const houseGrid = document.createElement('div');
     houseGrid.className = 'house-grid';
     for (let i = 0; i < 12; i++) {
@@ -491,11 +484,9 @@ const ChartRenderer = (() => {
       `;
       houseGrid.appendChild(div);
     }
-    houseSection.appendChild(houseGrid);
-    leftCol.appendChild(houseSection);
+    housesAnalysisSection.appendChild(houseGrid);
 
     // Analiz
-    const analysisSection = createSection('Element & Modalite', 'analysis');
     const analysisContent = document.createElement('div');
     analysisContent.className = 'analysis-content';
     const elemDiv = document.createElement('div');
@@ -535,12 +526,10 @@ const ChartRenderer = (() => {
       modDiv.appendChild(bar);
     }
     analysisContent.appendChild(modDiv);
-    analysisSection.appendChild(analysisContent);
-    leftCol.appendChild(analysisSection);
+    housesAnalysisSection.appendChild(analysisContent);
+    container.appendChild(housesAnalysisSection);
 
-    // SAĞ: Açılar
-    const rightCol = document.createElement('div');
-    rightCol.className = 'info-dual-col';
+    // PANEL 3: Açılar
     const aspectSection = createSection('Açılar (Aspektler)', 'aspects-list');
     const aspectList = document.createElement('div');
     aspectList.className = 'aspect-list';
@@ -565,11 +554,7 @@ const ChartRenderer = (() => {
       });
     }
     aspectSection.appendChild(aspectList);
-    rightCol.appendChild(aspectSection);
-
-    dualRow.appendChild(leftCol);
-    dualRow.appendChild(rightCol);
-    container.appendChild(dualRow);
+    container.appendChild(aspectSection);
   }
 
   function createSection(title, className) {
@@ -598,9 +583,10 @@ const ChartRenderer = (() => {
     const row = document.createElement('div');
     row.className = 'planet-row';
     row.style.animationDelay = `${idx * 0.06}s`;
+    const retroSymbol = planet.retrograde ? '<span class="retro-badge" title="Retro">℞</span>' : '';
     row.innerHTML = `
       <div class="planet-icon" style="color: ${planet.planet.color}">${planet.planet.symbol}</div>
-      <div class="planet-name">${planet.planet.name}</div>
+      <div class="planet-name">${planet.planet.name}${retroSymbol}</div>
       <div class="planet-sign" style="color: ${SIGN_COLORS[planet.signIndex]}">${planet.sign.symbol} ${planet.sign.name}</div>
       <div class="planet-degree">${planet.degreeFormatted}</div>
       <div class="planet-house">Ev ${house}</div>

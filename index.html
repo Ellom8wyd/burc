@@ -4,24 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Doğum haritası hesaplayıcı - Doğum tarihi, saati ve yerine göre detaylı natal harita analizi">
-  <title>Kozmik Harita — Doğum Haritası Hesaplayıcı</title>
+  <title>Doğum Haritası Hesaplayıcı</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+  <!-- Yükleme Ekranı -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-wheel">
+        <svg viewBox="0 0 200 200" class="splash-svg">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(140,120,255,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(140,120,255,0.1)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="url(#splashGrad)" stroke-width="2" stroke-dasharray="565" stroke-dashoffset="565" class="splash-ring"/>
+          <defs><linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d4a854"/><stop offset="100%" stop-color="#8a6cc7"/></linearGradient></defs>
+          <text x="100" y="105" text-anchor="middle" fill="#e8e4f5" font-family="'Cormorant Garamond',serif" font-size="18" opacity="0.8">✦</text>
+        </svg>
+      </div>
+      <p class="splash-text">Kozmik Harita</p>
+    </div>
+  </div>
+
   <canvas id="starfield"></canvas>
   <div id="nebula"></div>
 
-  <!-- NAVİGASYON -->
   <nav class="site-nav">
     <a href="index.html" class="nav-link active">☉ Doğum Haritası</a>
     <a href="synastry.html" class="nav-link">♡ Burç Uyumu</a>
+    <a href="transit.html" class="nav-link">⟳ Transitler</a>
   </nav>
 
   <section id="hero">
     <div class="hero-content">
-      <h1 class="site-title">Kozmik <span class="accent">Harita</span></h1>
+      <h1 class="site-title gradient-text">Kozmik <span class="accent">Harita</span></h1>
       <div class="hero-ornament">
         <span class="line"></span>
         <span>☉ ☽ ☿ ♀ ♂ ♃ ♄</span>
@@ -33,7 +49,6 @@
     <div id="formCard">
       <form id="birthForm" autocomplete="off">
         <div class="form-grid">
-
           <div class="form-group full-width">
             <label>Doğum Tarihi</label>
             <div class="date-inputs">
@@ -44,34 +59,25 @@
               <input type="number" id="birthYear" min="1900" max="2030" placeholder="YYYY" required>
             </div>
           </div>
-
           <div class="form-group">
-            <label>Doğum Saati (24 saat)</label>
+            <label>Doğum Saati</label>
             <div class="time-inputs">
               <input type="number" id="birthHour" min="0" max="23" placeholder="SS" required>
               <span class="date-sep">:</span>
               <input type="number" id="birthMinute" min="0" max="59" placeholder="DD" required>
             </div>
           </div>
-
           <div class="form-group">
             <label for="city">İl</label>
-            <select id="city" required>
-              <option value="">İl Seçin</option>
-            </select>
+            <select id="city" required><option value="">İl Seçin</option></select>
           </div>
-
           <div class="form-group full-width">
             <label for="district">İlçe</label>
-            <select id="district" disabled>
-              <option value="">İlçe Seçin (opsiyonel)</option>
-            </select>
+            <select id="district" disabled><option value="">İlçe Seçin (İsteğe Bağlı)</option></select>
           </div>
-
           <div class="calc-btn-wrapper">
             <button type="button" id="calcBtn">✦ Haritayı Hesapla</button>
           </div>
-
         </div>
       </form>
     </div>
@@ -79,10 +85,8 @@
 
   <section id="results">
     <div id="summaryBox"></div>
-    <div class="results-grid">
-      <div id="chartContainer"></div>
-      <div id="infoPanel"></div>
-    </div>
+    <div id="chartContainer"></div>
+    <div id="infoPanel"></div>
     <div id="interpretationsPanel"></div>
     <div class="recalc-wrapper">
       <button id="recalcBtn">↺ Yeniden Hesapla</button>
@@ -90,12 +94,14 @@
   </section>
 
   <footer>
-    <p>✦ Kozmik Harita — Placidus ev sistemi ile yüksek hassasiyetli natal harita hesaplaması ✦</p>
+    <p>✦ Yağmur Elif Ülkü Sayesinde ✦</p>
   </footer>
 
   <script src="js/locations.js"></script>
   <script src="js/astro-engine.js"></script>
   <script src="js/interpretations.js"></script>
+  <script src="js/house-interpretations.js"></script>
+  <script src="js/aspect-interpretations.js"></script>
   <script src="js/chart-renderer.js"></script>
   <script src="js/app.js"></script>
 

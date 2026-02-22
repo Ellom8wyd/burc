@@ -676,8 +676,8 @@
    #results {
      position: relative;
      z-index: 1;
-     padding: 2rem;
-     max-width: 1200px;
+     padding: 2rem clamp(1rem, 3vw, 3rem);
+     max-width: 1400px;
      margin: 0 auto;
      width: 100%;
      opacity: 0;
@@ -838,26 +838,25 @@
    /* ============================================
       HARİTA + BİLGİ PANELİ LAYOUT
       ============================================ */
-   .results-grid {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     gap: 2rem;
-     align-items: start;
-   }
+   
+   /* Eski grid kaldırıldı — harita ve panel artık ayrı satırlar */
    
    /* ============================================
-      HARİTA CONTAINER
+      HARİTA CONTAINER — TAM GENİŞLİK
       ============================================ */
    #chartContainer {
      position: relative;
      background: var(--bg-card-elevated);
      border: 1px solid var(--border-glow);
      border-radius: var(--radius-xl);
-     padding: 1.5rem;
+     padding: 2rem;
      backdrop-filter: blur(24px);
      box-shadow: var(--shadow-card-elevated);
      animation: chartReveal 1.2s var(--ease-out-expo) 0.5s both;
      overflow: hidden;
+     max-width: 680px;
+     margin: 0 auto 2rem;
+     width: 100%;
    }
    
    @keyframes chartReveal {
@@ -907,9 +906,11 @@
       BİLGİ PANELİ
       ============================================ */
    #infoPanel {
-     display: flex;
-     flex-direction: column;
-     gap: 1.2rem;
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 1.5rem;
+     width: 100%;
+     margin-bottom: 1.5rem;
    }
    
    /* Bilgi kartları ortak stili */
@@ -949,6 +950,7 @@
    
    .info-section:nth-child(1) { animation-delay: 0.6s; }
    .info-section:nth-child(2) { animation-delay: 0.75s; }
+   .info-section:nth-child(3) { animation-delay: 0.9s; }
    
    @keyframes sectionSlideIn {
      from {
@@ -1745,34 +1747,188 @@
    }
    
    /* ============================================
-      FOOTER
+      FOOTER — Sevgi Animasyonu
       ============================================ */
    footer {
      position: relative;
      z-index: 1;
      text-align: center;
-     padding: 2.5rem 1rem;
+     padding: 3rem 1rem;
      font-family: var(--font-display);
-     font-size: 0.8rem;
+     font-size: 0.85rem;
      color: var(--text-dim);
-     letter-spacing: 0.12em;
+     letter-spacing: 0.14em;
+     overflow: hidden;
+     cursor: default;
+     transition: padding 0.8s var(--ease-out-expo), background 0.8s;
+     -webkit-tap-highlight-color: transparent;
    }
    
+   /* Üst çizgi */
    footer::before {
      content: '';
      display: block;
-     width: 120px;
+     width: 80px;
      height: 1px;
-     background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+     background: linear-gradient(90deg, transparent, rgba(199, 106, 138, 0.3), transparent);
      margin: 0 auto 1.5rem;
+     transition: all 1s var(--ease-out-expo);
    }
    
    footer p {
-     transition: color 0.3s;
+     transition: all 0.8s var(--ease-out-expo);
+     position: relative;
+     z-index: 2;
    }
    
-   footer:hover p {
-     color: var(--text-muted);
+   /* Arka plan ışık (gizli) */
+   footer::after {
+     content: '';
+     position: absolute;
+     bottom: 50%;
+     left: 50%;
+     width: 0;
+     height: 0;
+     border-radius: 50%;
+     background: radial-gradient(circle,
+       rgba(199, 106, 138, 0.06) 0%,
+       rgba(212, 168, 84, 0.04) 40%,
+       transparent 70%
+     );
+     transform: translate(-50%, 50%);
+     transition: all 1.2s var(--ease-out-expo);
+     pointer-events: none;
+   }
+   
+   /* === HOVER / TAP === */
+   footer:hover,
+   footer:active {
+     padding: 3.5rem 1rem 4rem;
+   }
+   
+   /* Üst çizgi genişler ve renk değiştirir */
+   footer:hover::before,
+   footer:active::before {
+     width: 220px;
+     height: 1px;
+     background: linear-gradient(90deg,
+       transparent,
+       rgba(199, 106, 138, 0.3),
+       rgba(199, 106, 138, 0.6),
+       rgba(212, 168, 84, 0.5),
+       rgba(199, 106, 138, 0.6),
+       rgba(199, 106, 138, 0.3),
+       transparent
+     );
+     animation: footerLineBreath 3s ease-in-out infinite;
+   }
+   
+   @keyframes footerLineBreath {
+     0%, 100% { width: 180px; opacity: 0.6; }
+     50% { width: 260px; opacity: 1; }
+   }
+   
+   /* Arka plan ışık açılır */
+   footer:hover::after,
+   footer:active::after {
+     width: 600px;
+     height: 600px;
+     animation: footerWarmGlow 4s ease-in-out infinite;
+   }
+   
+   @keyframes footerWarmGlow {
+     0%, 100% { transform: translate(-50%, 50%) scale(1); opacity: 0.5; }
+     50% { transform: translate(-50%, 50%) scale(1.15); opacity: 0.8; }
+   }
+   
+   /* İsim stili — hover'da canlanır */
+   footer:hover p,
+   footer:active p {
+     color: var(--text-primary);
+     font-size: 1.15rem;
+     letter-spacing: 0.2em;
+     text-shadow:
+       0 0 15px rgba(199, 106, 138, 0.25),
+       0 0 40px rgba(199, 106, 138, 0.1);
+     background: linear-gradient(135deg,
+       rgba(199, 106, 138, 1) 0%,
+       var(--text-primary) 30%,
+       var(--accent-gold) 55%,
+       rgba(199, 106, 138, 1) 100%
+     );
+     background-size: 200% 200%;
+     -webkit-background-clip: text;
+     background-clip: text;
+     -webkit-text-fill-color: transparent;
+     animation: footerNameShimmer 4s ease-in-out infinite;
+   }
+   
+   @keyframes footerNameShimmer {
+     0% { background-position: 0% 50%; }
+     50% { background-position: 100% 50%; }
+     100% { background-position: 0% 50%; }
+   }
+   
+   /* Kalpler — üstte beliren */
+   footer:hover p::before,
+   footer:active p::before {
+     content: '♡ ✦ ♡';
+     display: block;
+     font-size: 1.4rem;
+     letter-spacing: 0.5em;
+     margin-bottom: 0.7rem;
+     -webkit-text-fill-color: rgba(199, 106, 138, 0.7);
+     background: none;
+     text-shadow:
+       0 0 12px rgba(199, 106, 138, 0.3),
+       0 0 25px rgba(199, 106, 138, 0.15);
+     opacity: 0;
+     animation:
+       footerHeartsIn 0.6s var(--ease-out-back) forwards,
+       footerHeartsFloat 3s ease-in-out 0.6s infinite;
+   }
+   
+   @keyframes footerHeartsIn {
+     from { opacity: 0; transform: translateY(8px) scale(0.6); }
+     to { opacity: 1; transform: translateY(0) scale(1); }
+   }
+   
+   @keyframes footerHeartsFloat {
+     0%, 100% { transform: translateY(0); }
+     50% { transform: translateY(-4px); }
+   }
+   
+   /* Alt satır — küçük yıldızlar */
+   footer:hover p::after,
+   footer:active p::after {
+     content: '· ˚ ✧ ˚ ·';
+     display: block;
+     font-size: 0.9rem;
+     letter-spacing: 0.4em;
+     margin-top: 0.6rem;
+     -webkit-text-fill-color: rgba(212, 168, 84, 0.4);
+     background: none;
+     text-shadow: 0 0 8px rgba(212, 168, 84, 0.15);
+     opacity: 0;
+     animation: footerDotsIn 0.7s var(--ease-out-expo) 0.25s forwards;
+   }
+   
+   @keyframes footerDotsIn {
+     from { opacity: 0; letter-spacing: 0.8em; }
+     to { opacity: 0.7; letter-spacing: 0.4em; }
+   }
+   
+   /* Footer link */
+   footer a {
+     color: var(--accent-rose);
+     text-decoration: none;
+     transition: all 0.3s;
+     -webkit-text-fill-color: var(--accent-rose);
+   }
+   
+   footer:hover a,
+   footer:active a {
+     -webkit-text-fill-color: var(--accent-gold);
    }
    
    /* ============================================
@@ -1781,12 +1937,14 @@
    
    /* Tablet */
    @media (max-width: 1024px) {
-     .results-grid {
-       gap: 1.5rem;
+     #chartContainer {
+       padding: 1.5rem;
+       max-width: 600px;
      }
    
-     #chartContainer {
-       padding: 1rem;
+     #infoPanel {
+       grid-template-columns: repeat(3, 1fr);
+       gap: 1.2rem;
      }
    
      .interp-main-title::before,
@@ -1797,21 +1955,27 @@
    
    /* Küçük tablet / büyük telefon */
    @media (max-width: 900px) {
-     .results-grid {
-       grid-template-columns: 1fr;
-     }
-   
-     .info-dual-row {
+     #infoPanel {
        grid-template-columns: 1fr 1fr;
      }
    
+     /* Planets section spans full width when 2-col */
+     #infoPanel > .info-section:first-child {
+       grid-column: 1 / -1;
+     }
+   
      #chartContainer {
-       max-width: 500px;
-       margin: 0 auto;
+       max-width: 520px;
      }
    
      .summary-trinity {
        gap: 2rem;
+     }
+   
+     #synResults,
+     #transitResults {
+       max-width: 100%;
+       padding: 2rem 1.5rem;
      }
    }
    
@@ -1829,6 +1993,14 @@
    
      #results {
        padding: 1rem 0.75rem;
+     }
+   
+     #infoPanel {
+       grid-template-columns: 1fr;
+     }
+   
+     #infoPanel > .info-section:first-child {
+       grid-column: auto;
      }
    
      .summary-trinity {
@@ -1850,7 +2022,7 @@
      }
    
      .house-grid {
-       grid-template-columns: repeat(3, 1fr);
+       grid-template-columns: repeat(4, 1fr);
      }
    
      .summary-meta {
@@ -1874,6 +2046,17 @@
    
      .info-dual-row {
        grid-template-columns: 1fr;
+     }
+   
+     /* Footer mobilde küçülsün */
+     footer:hover p::before,
+     footer:active p::before {
+       font-size: 1.1rem;
+     }
+   
+     footer:hover p::after,
+     footer:active p::after {
+       font-size: 0.8rem;
      }
    }
    
@@ -1911,10 +2094,6 @@
        gap: 0.3rem;
      }
    
-     .info-dual-row {
-       grid-template-columns: 1fr;
-     }
-   
      #birthDay, #birthMonth { width: 52px; }
      #birthYear { width: 72px; }
    
@@ -1938,6 +2117,18 @@
      #calcBtn {
        padding: 0.85rem 2.5rem;
        font-size: 1rem;
+     }
+   
+     footer:hover p::before,
+     footer:active p::before {
+       font-size: 1rem;
+       letter-spacing: 0.3em;
+     }
+   
+     footer:hover p::after,
+     footer:active p::after {
+       font-size: 0.75rem;
+       letter-spacing: 0.25em;
      }
    }
    
@@ -2282,8 +2473,8 @@
    #synResults {
      position: relative;
      z-index: 1;
-     padding: 2rem 1.5rem;
-     max-width: 800px;
+     padding: 2rem clamp(1rem, 3vw, 3rem);
+     max-width: 1100px;
      margin: 0 auto;
      width: 100%;
      opacity: 0;
@@ -2803,6 +2994,323 @@
      }
    }
    
+   /* ============================================
+      SPLASH / YÜKLEME EKRANI
+      ============================================ */
+   .splash-screen {
+     position: fixed;
+     inset: 0;
+     z-index: 9999;
+     background: var(--bg-deep);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: opacity 0.7s var(--ease-smooth), visibility 0.7s;
+   }
+   
+   .splash-screen.fade-out {
+     opacity: 0;
+     visibility: hidden;
+     pointer-events: none;
+   }
+   
+   .splash-content {
+     text-align: center;
+   }
+   
+   .splash-wheel {
+     width: 120px;
+     height: 120px;
+     margin: 0 auto 1.5rem;
+     animation: splashPulse 2s ease-in-out infinite;
+   }
+   
+   @keyframes splashPulse {
+     0%, 100% { transform: scale(1); filter: brightness(1); }
+     50% { transform: scale(1.05); filter: brightness(1.2); }
+   }
+   
+   .splash-svg {
+     width: 100%;
+     height: 100%;
+   }
+   
+   .splash-ring {
+     animation: splashDraw 1.5s var(--ease-out-expo) 0.2s forwards;
+     transform-origin: center;
+   }
+   
+   @keyframes splashDraw {
+     from { stroke-dashoffset: 565; transform: rotate(-90deg); }
+     to { stroke-dashoffset: 0; transform: rotate(270deg); }
+   }
+   
+   .splash-text {
+     font-family: var(--font-display);
+     font-size: 1.3rem;
+     font-weight: 300;
+     letter-spacing: 0.25em;
+     color: var(--text-secondary);
+     animation: splashTextIn 0.8s var(--ease-out-expo) 0.5s both;
+     opacity: 0;
+   }
+   
+   @keyframes splashTextIn {
+     from { opacity: 0; transform: translateY(10px); letter-spacing: 0.5em; }
+     to { opacity: 1; transform: translateY(0); letter-spacing: 0.25em; }
+   }
+   
+   /* ============================================
+      CURSOR GLOW / KOZMİK İMLEÇ
+      ============================================ */
+   .cursor-glow {
+     position: fixed;
+     width: 300px;
+     height: 300px;
+     border-radius: 50%;
+     background: radial-gradient(circle,
+       rgba(138, 108, 199, 0.06) 0%,
+       rgba(74, 127, 219, 0.03) 30%,
+       transparent 70%
+     );
+     pointer-events: none;
+     z-index: 2;
+     will-change: transform;
+     mix-blend-mode: screen;
+     transition: opacity 0.3s;
+   }
+   
+   /* Mobilde gizle */
+   @media (hover: none) {
+     .cursor-glow { display: none; }
+   }
+   
+   /* ============================================
+      ANIMATED GRADIENT TEXT
+      ============================================ */
+   .gradient-text {
+     background: linear-gradient(
+       135deg,
+       var(--accent-gold) 0%,
+       var(--accent-purple-bright) 25%,
+       var(--accent-blue) 50%,
+       var(--accent-rose) 75%,
+       var(--accent-gold) 100%
+     );
+     background-size: 300% 300%;
+     -webkit-background-clip: text;
+     background-clip: text;
+     -webkit-text-fill-color: transparent;
+     animation: gradientShift 6s ease-in-out infinite;
+   }
+   
+   @keyframes gradientShift {
+     0% { background-position: 0% 50%; }
+     50% { background-position: 100% 50%; }
+     100% { background-position: 0% 50%; }
+   }
+   
+   /* Accent kelimeler hâlâ gold kalsın ama parlasın */
+   .gradient-text .accent {
+     -webkit-text-fill-color: var(--accent-gold);
+     text-shadow: 0 0 20px rgba(212, 168, 84, 0.3);
+     filter: none;
+   }
+   
+   /* ============================================
+      RETRO BADGE
+      ============================================ */
+   .retro-badge {
+     display: inline-block;
+     font-size: 0.65em;
+     color: #FF6B6B;
+     text-shadow: 0 0 8px rgba(255, 107, 107, 0.4);
+     margin-left: 0.25em;
+     vertical-align: super;
+     font-weight: 700;
+     animation: retroPulse 2s ease-in-out infinite;
+   }
+   
+   @keyframes retroPulse {
+     0%, 100% { opacity: 0.7; transform: scale(1); }
+     50% { opacity: 1; transform: scale(1.15); }
+   }
+   
+   /* ============================================
+      TRANSİT SAYFASI STİLLERİ
+      ============================================ */
+   #transitResults {
+     position: relative;
+     z-index: 1;
+     padding: 2rem clamp(1rem, 3vw, 3rem);
+     max-width: 1100px;
+     margin: 0 auto;
+     width: 100%;
+     opacity: 0;
+     transform: translateY(40px);
+     pointer-events: none;
+     transition: all 0.8s var(--ease-out-expo);
+   }
+   
+   #transitResults.visible {
+     opacity: 1;
+     transform: translateY(0);
+     pointer-events: all;
+   }
+   
+   .transit-header {
+     margin-bottom: 1.5rem;
+     animation: interpReveal 0.6s var(--ease-out-expo) both;
+   }
+   
+   .transit-planet-grid {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+   }
+   
+   .transit-planet-item {
+     display: grid;
+     grid-template-columns: 28px 1fr 1fr 70px;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.4rem 0.3rem;
+     border-radius: var(--radius-sm);
+     transition: all 0.25s;
+     animation: rowFadeIn 0.4s var(--ease-out-expo) both;
+   }
+   
+   .transit-planet-item:hover {
+     background: rgba(140, 120, 255, 0.05);
+     transform: translateX(3px);
+   }
+   
+   .transit-p-icon {
+     font-size: 1.1rem;
+     text-align: center;
+     text-shadow: 0 0 10px currentColor;
+   }
+   
+   .transit-p-name {
+     font-family: var(--font-display);
+     font-size: 0.88rem;
+     color: var(--text-primary);
+   }
+   
+   .transit-p-sign {
+     font-family: var(--font-display);
+     font-size: 0.85rem;
+   }
+   
+   .transit-p-deg {
+     font-family: var(--font-mono);
+     font-size: 0.65rem;
+     color: var(--text-secondary);
+     text-align: right;
+   }
+   
+   /* Aktif transit itemleri */
+   .transit-active-item {
+     padding: 0.8rem 1rem;
+     border-radius: var(--radius-md);
+     margin-bottom: 0.6rem;
+     border-left: 3px solid transparent;
+     transition: all 0.3s;
+     animation: interpReveal 0.5s var(--ease-out-expo) both;
+   }
+   
+   .transit-active-item.positive {
+     background: rgba(76, 175, 80, 0.04);
+     border-left-color: rgba(76, 175, 80, 0.5);
+   }
+   
+   .transit-active-item.negative {
+     background: rgba(255, 80, 80, 0.04);
+     border-left-color: rgba(255, 80, 80, 0.5);
+   }
+   
+   .transit-active-item.neutral {
+     background: rgba(255, 215, 0, 0.04);
+     border-left-color: rgba(255, 215, 0, 0.5);
+   }
+   
+   .transit-active-item:hover {
+     transform: translateX(3px);
+   }
+   
+   .transit-active-header {
+     display: flex;
+     align-items: center;
+     gap: 0.4rem;
+     font-size: 1rem;
+     margin-bottom: 0.4rem;
+     flex-wrap: wrap;
+   }
+   
+   .transit-active-header span:first-child,
+   .transit-active-header span:nth-child(3) {
+     text-shadow: 0 0 8px currentColor;
+   }
+   
+   .transit-active-label {
+     font-family: var(--font-display);
+     font-size: 0.82rem;
+     color: var(--text-secondary);
+     flex: 1;
+     margin-left: 0.3rem;
+   }
+   
+   .transit-active-interp {
+     font-family: var(--font-body);
+     font-size: 0.88rem;
+     color: var(--text-secondary);
+     line-height: 1.65;
+     padding-left: 0.5rem;
+     border-left: 1px solid rgba(140, 120, 255, 0.1);
+     margin-top: 0.3rem;
+   }
+   
+   /* Retro gezegen kartları */
+   .transit-retro-item {
+     display: flex;
+     gap: 0.8rem;
+     padding: 1rem;
+     margin-bottom: 0.8rem;
+     background: rgba(255, 107, 107, 0.03);
+     border: 1px solid rgba(255, 107, 107, 0.08);
+     border-left: 3px solid;
+     border-radius: var(--radius-md);
+     animation: interpReveal 0.5s var(--ease-out-expo) both;
+     transition: all 0.3s;
+   }
+   
+   .transit-retro-item:hover {
+     background: rgba(255, 107, 107, 0.06);
+     transform: translateX(3px);
+   }
+   
+   /* ============================================
+      TRANSIT MOBİL
+      ============================================ */
+   @media (max-width: 768px) {
+     .transit-planet-item {
+       grid-template-columns: 24px 1fr 1fr;
+       font-size: 0.85rem;
+     }
+     .transit-p-deg { display: none; }
+   
+     .transit-active-header {
+       font-size: 0.9rem;
+     }
+   }
+   
+   @media (max-width: 480px) {
+     .transit-retro-item {
+       flex-direction: column;
+       gap: 0.4rem;
+     }
+   }
+   
    /* Print stili */
    @media print {
      #starfield,
@@ -2810,7 +3318,10 @@
      .celebration-particles,
      #calcBtn,
      #recalcBtn,
-     .recalc-wrapper {
+     .recalc-wrapper,
+     .splash-screen,
+     .cursor-glow,
+     .site-nav {
        display: none !important;
      }
    
@@ -2830,4 +3341,3 @@
        box-shadow: none;
      }
    }
-   

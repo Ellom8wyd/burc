@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Günlük transit analizi - Bugünkü gökyüzü doğum haritanızla ne diyor?">
+  <title>Kozmik Harita — Günlük Transitler</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⟳</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="starfield"></canvas>
+  <div id="nebula"></div>
+
+  <!-- Yükleme Ekranı -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-wheel">
+        <svg viewBox="0 0 200 200" class="splash-svg">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(140,120,255,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(140,120,255,0.1)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="url(#splashGrad)" stroke-width="2" stroke-dasharray="565" stroke-dashoffset="565" class="splash-ring"/>
+          <defs><linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d4a854"/><stop offset="100%" stop-color="#8a6cc7"/></linearGradient></defs>
+          <text x="100" y="105" text-anchor="middle" fill="#e8e4f5" font-family="'Cormorant Garamond',serif" font-size="18" opacity="0.8">✦</text>
+        </svg>
+      </div>
+      <p class="splash-text">Kozmik Harita</p>
+    </div>
+  </div>
+
+  <!-- NAVİGASYON -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-link">☉ Doğum Haritası</a>
+    <a href="synastry.html" class="nav-link">♡ Burç Uyumu</a>
+    <a href="transit.html" class="nav-link active">⟳ Transitler</a>
+  </nav>
+
+  <!-- FORM -->
+  <section id="transitFormSection" class="syn-form-section">
+    <div class="hero-content">
+      <h1 class="site-title gradient-text">Günlük <span class="accent">Transitler</span></h1>
+      <div class="hero-ornament">
+        <span class="line"></span>
+        <span>⟳ Bugünkü Gökyüzü ⟳</span>
+        <span class="line"></span>
+      </div>
+      <p class="site-subtitle">Kozmik Hava Durumu</p>
+    </div>
+
+    <div id="transitFormCard" class="syn-person-card" style="max-width:480px;margin:0 auto;">
+      <div class="syn-person-header">
+        <span class="syn-person-num" style="color:var(--accent-gold)">☉</span>
+        <span style="font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary)">Doğum Bilgileriniz</span>
+      </div>
+      <div class="syn-person-fields">
+        <div class="form-group full-width">
+          <label>Doğum Tarihi</label>
+          <div class="date-inputs">
+            <input type="number" id="tDay" min="1" max="31" placeholder="GG" required>
+            <span class="date-sep">/</span>
+            <input type="number" id="tMonth" min="1" max="12" placeholder="AA" required>
+            <span class="date-sep">/</span>
+            <input type="number" id="tYear" min="1900" max="2030" placeholder="YYYY" required>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>Doğum Saati (24 saat)</label>
+          <div class="time-inputs">
+            <input type="number" id="tHour" min="0" max="23" placeholder="SS" required>
+            <span class="date-sep">:</span>
+            <input type="number" id="tMinute" min="0" max="59" placeholder="DD" required>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>İl</label>
+          <select id="tCity" required><option value="">İl Seçin</option></select>
+        </div>
+        <div class="form-group full-width">
+          <label>İlçe</label>
+          <select id="tDistrict" disabled><option value="">İlçe (opsiyonel)</option></select>
+        </div>
+      </div>
+      <div class="syn-calc-wrapper" style="margin-top:1.2rem">
+        <button type="button" id="transitCalcBtn">⟳ Transitleri Göster</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sonuçlar -->
+  <section id="transitResults"></section>
+
+  <footer>
+    <p>✦ Yağmur Elif Ülkü Sayesinde ✦</p>
+  </footer>
+
+  <script src="js/locations.js"></script>
+  <script src="js/astro-engine.js"></script>
+  <script src="js/transit-app.js"></script>
+
+</body>
+</html>

@@ -223,6 +223,24 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     resultsSection.appendChild(scoreSection);
 
+    // Score count-up animation
+    const scoreNumEl = scoreSection.querySelector('.syn-score-num');
+    if (scoreNumEl) {
+      const target = compat.overall;
+      let current = 0;
+      const duration = 1800;
+      const startTime = performance.now();
+      function countUp(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        current = Math.round(eased * target);
+        scoreNumEl.textContent = current;
+        if (progress < 1) requestAnimationFrame(countUp);
+      }
+      requestAnimationFrame(countUp);
+    }
+
     // KATEGORİ BARLARI
     const catsSection = document.createElement('div');
     catsSection.className = 'syn-categories';
@@ -362,5 +380,29 @@ document.addEventListener('DOMContentLoaded', () => {
   bindAutoTab([p2.day, p2.month, p2.year, p2.hour, p2.minute]);
   createStarfield();
   createNebula();
+  initSplash();
+  initCursorGlow();
   setTimeout(() => document.body.classList.add('loaded'), 100);
+
+  function initSplash() {
+    const splash = document.getElementById('splashScreen');
+    if (!splash) return;
+    setTimeout(() => splash.classList.add('fade-out'), 1500);
+    setTimeout(() => splash.remove(), 2200);
+  }
+
+  function initCursorGlow() {
+    if (window.matchMedia('(hover: none)').matches) return;
+    const glow = document.createElement('div');
+    glow.className = 'cursor-glow';
+    document.body.appendChild(glow);
+    let mx = -200, my = -200, cx = -200, cy = -200;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animate() {
+      cx += (mx - cx) * 0.1; cy += (my - cy) * 0.1;
+      glow.style.transform = `translate(${cx - 150}px, ${cy - 150}px)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
 });

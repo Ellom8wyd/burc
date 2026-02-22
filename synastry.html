@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Burç uyumu hesaplayıcı - İki kişinin doğum haritası karşılaştırması ve ilişki analizi">
-  <title>Kozmik Harita — Burç Uyumu</title>
+  <title>Kozmik Harita - Burç Uyumu</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♡</text></svg>">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -13,10 +13,27 @@
   <canvas id="starfield"></canvas>
   <div id="nebula"></div>
 
+  <!-- Yükleme Ekranı -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-wheel">
+        <svg viewBox="0 0 200 200" class="splash-svg">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(140,120,255,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(140,120,255,0.1)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="url(#splashGrad)" stroke-width="2" stroke-dasharray="565" stroke-dashoffset="565" class="splash-ring"/>
+          <defs><linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d4a854"/><stop offset="100%" stop-color="#8a6cc7"/></linearGradient></defs>
+          <text x="100" y="105" text-anchor="middle" fill="#e8e4f5" font-family="'Cormorant Garamond',serif" font-size="18" opacity="0.8">✦</text>
+        </svg>
+      </div>
+      <p class="splash-text">Kozmik Harita</p>
+    </div>
+  </div>
+
   <!-- NAVİGASYON -->
   <nav class="site-nav">
     <a href="index.html" class="nav-link">☉ Doğum Haritası</a>
     <a href="synastry.html" class="nav-link active">♡ Burç Uyumu</a>
+    <a href="transit.html" class="nav-link">⟳ Transitler</a>
   </nav>
 
   <!-- FORM BÖLÜMÜ -->
@@ -36,7 +53,7 @@
       <div class="syn-person-card" id="personCard1">
         <div class="syn-person-header">
           <span class="syn-person-num">I</span>
-          <input type="text" id="p1Name" class="syn-name-input" placeholder="İsim (opsiyonel)">
+          <input type="text" id="p1Name" class="syn-name-input" placeholder="İsim (İsteğe Bağlı)">
         </div>
         <div class="syn-person-fields">
           <div class="form-group full-width">
@@ -50,7 +67,7 @@
             </div>
           </div>
           <div class="form-group full-width">
-            <label>Doğum Saati (24 saat)</label>
+            <label>Doğum Saati</label>
             <div class="time-inputs">
               <input type="number" id="p1Hour" min="0" max="23" placeholder="SS" required>
               <span class="date-sep">:</span>
@@ -63,7 +80,7 @@
           </div>
           <div class="form-group full-width">
             <label>İlçe</label>
-            <select id="p1District" disabled><option value="">İlçe (opsiyonel)</option></select>
+            <select id="p1District" disabled><option value="">İlçe (İsteğe Bağlı)</option></select>
           </div>
         </div>
       </div>
@@ -77,7 +94,7 @@
       <div class="syn-person-card" id="personCard2">
         <div class="syn-person-header">
           <span class="syn-person-num">II</span>
-          <input type="text" id="p2Name" class="syn-name-input" placeholder="İsim (opsiyonel)">
+          <input type="text" id="p2Name" class="syn-name-input" placeholder="İsim (İsteğe Bağlı)">
         </div>
         <div class="syn-person-fields">
           <div class="form-group full-width">
@@ -91,7 +108,7 @@
             </div>
           </div>
           <div class="form-group full-width">
-            <label>Doğum Saati (24 saat)</label>
+            <label>Doğum Saati </label>
             <div class="time-inputs">
               <input type="number" id="p2Hour" min="0" max="23" placeholder="SS" required>
               <span class="date-sep">:</span>
@@ -104,7 +121,7 @@
           </div>
           <div class="form-group full-width">
             <label>İlçe</label>
-            <select id="p2District" disabled><option value="">İlçe (opsiyonel)</option></select>
+            <select id="p2District" disabled><option value="">İlçe (İsteğe Bağlı)</option></select>
           </div>
         </div>
       </div>
@@ -121,7 +138,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>✦ Kozmik Harita — Astrolojik uyum analizi ✦</p>
+    <p>✦ Yağmur Elif Ülkü Sayesinde ✦</p>
   </footer>
 
   <script src="js/locations.js"></script>

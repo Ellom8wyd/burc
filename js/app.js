@@ -361,7 +361,99 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     interpretationsPanel.appendChild(synthCard);
 
+    // ============================================
+    // EV YORUMLARI
+    // ============================================
+    if (typeof HouseInterpretations !== 'undefined') {
+      const houseInterps = HouseInterpretations.getAllForChart(chartData.planetHouses);
+      if (houseInterps.length > 0) {
+        const hTitle = document.createElement('h2');
+        hTitle.className = 'interp-main-title';
+        hTitle.style.marginTop = '2rem';
+        hTitle.textContent = '🏠 Ev Yorumları';
+        interpretationsPanel.appendChild(hTitle);
+
+        houseInterps.forEach((hi, idx) => {
+          interpretationsPanel.appendChild(createInterpCard(
+            `${hi.symbol} ${hi.planet} — ${hi.house}. Ev`,
+            hi.text,
+            getHousePlanetColor(hi.symbol),
+            hi.symbol,
+            idx
+          ));
+        });
+      }
+    }
+
+    // ============================================
+    // AÇI YORUMLARI
+    // ============================================
+    if (typeof AspectInterpretations !== 'undefined' && chartData.aspects) {
+      const aspInterps = AspectInterpretations.getAllAspectInterpretations(chartData.aspects);
+      if (aspInterps.length > 0) {
+        const aTitle = document.createElement('h2');
+        aTitle.className = 'interp-main-title';
+        aTitle.style.marginTop = '2rem';
+        aTitle.textContent = '△ Açı Yorumları';
+        interpretationsPanel.appendChild(aTitle);
+
+        aspInterps.forEach((ai, idx) => {
+          const typeLabel = ai.type === 'major' ? '' : ' (minör)';
+          interpretationsPanel.appendChild(createInterpCard(
+            `${ai.planet1Symbol || ''} ${ai.aspectSymbol} ${ai.planet2Symbol || ''} ${ai.planet1} ${ai.aspectName} ${ai.planet2}${typeLabel}`,
+            ai.text,
+            getAspectColor(ai.aspectName),
+            ai.aspectSymbol,
+            idx
+          ));
+        });
+      }
+    }
+
+    // ============================================
+    // RETRO GEZEGENLERİ
+    // ============================================
+    if (typeof AspectInterpretations !== 'undefined') {
+      const retroPlanets = [];
+      const order = ['mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto'];
+      for (const key of order) {
+        const p = chartData.planets[key];
+        if (p && p.retrograde) {
+          const meaning = AspectInterpretations.getRetrogradeMeaning(key);
+          if (meaning) retroPlanets.push({ key, ...meaning, color: p.planet?.color || '#aaa', symbol: p.planet?.symbol || '' });
+        }
+      }
+
+      if (retroPlanets.length > 0) {
+        const rTitle = document.createElement('h2');
+        rTitle.className = 'interp-main-title';
+        rTitle.style.marginTop = '2rem';
+        rTitle.textContent = '℞ Retro Gezegenler';
+        interpretationsPanel.appendChild(rTitle);
+
+        retroPlanets.forEach((rp, idx) => {
+          interpretationsPanel.appendChild(createInterpCard(
+            rp.name,
+            rp.text,
+            rp.color,
+            rp.symbol + '℞',
+            idx
+          ));
+        });
+      }
+    }
+
     interpretationsPanel.classList.add('visible');
+  }
+
+  function getHousePlanetColor(symbol) {
+    const map = { '☉':'#FFD700','☽':'#C0C0C0','☿':'#A0D2DB','♀':'#FF69B4','♂':'#FF4500','♃':'#FFA500','♄':'#DAA520' };
+    return map[symbol] || '#8a6cc7';
+  }
+
+  function getAspectColor(name) {
+    const map = { 'Kavuşum':'#FFD700','Üçgen':'#4CAF50','Kare':'#FF4444','Karşıt':'#FF9800','Altmışlık':'#4ECDC4' };
+    return map[name] || '#8a6cc7';
   }
 
   function createInterpCard(title, text, color, icon, idx) {
@@ -471,5 +563,35 @@ document.addEventListener('DOMContentLoaded', () => {
   populateCities();
   createStarfield();
   createNebula();
+  initSplash();
+  initCursorGlow();
   setTimeout(() => document.body.classList.add('loaded'), 100);
+
+  // ============================================
+  // SPLASH SCREEN
+  // ============================================
+  function initSplash() {
+    const splash = document.getElementById('splashScreen');
+    if (!splash) return;
+    setTimeout(() => splash.classList.add('fade-out'), 1500);
+    setTimeout(() => splash.remove(), 2200);
+  }
+
+  // ============================================
+  // CURSOR GLOW
+  // ============================================
+  function initCursorGlow() {
+    if (window.matchMedia('(hover: none)').matches) return; // Skip on touch
+    const glow = document.createElement('div');
+    glow.className = 'cursor-glow';
+    document.body.appendChild(glow);
+    let mx = -200, my = -200, cx = -200, cy = -200;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animate() {
+      cx += (mx - cx) * 0.1; cy += (my - cy) * 0.1;
+      glow.style.transform = `translate(${cx - 150}px, ${cy - 150}px)`;
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
 });
