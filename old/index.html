@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Doğum haritası hesaplayıcı - Doğum tarihi, saati ve yerine göre detaylı natal harita analizi">
+  <title>Kozmik Harita — Doğum Haritası Hesaplayıcı</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Arkaplan Katmanları -->
+  <canvas id="starfield"></canvas>
+  <div id="nebula"></div>
+
+  <!-- Hero Bölümü -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1 class="site-title">Kozmik <span class="accent">Harita</span></h1>
+      <div class="hero-ornament">
+        <span class="line"></span>
+        <span>☉ ☽ ☿ ♀ ♂ ♃ ♄</span>
+        <span class="line"></span>
+      </div>
+      <p class="site-subtitle">Doğum Haritası Hesaplayıcı</p>
+    </div>
+
+    <!-- Form -->
+    <div id="formCard">
+      <form id="birthForm" autocomplete="off">
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="birthDate">Doğum Tarihi</label>
+            <input type="date" id="birthDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="birthTime">Doğum Saati</label>
+            <input type="time" id="birthTime" required>
+          </div>
+
+          <div class="form-group">
+            <label for="city">İl</label>
+            <select id="city" required>
+              <option value="">İl Seçin</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="district">İlçe</label>
+            <select id="district" disabled>
+              <option value="">İlçe Seçin (opsiyonel)</option>
+            </select>
+          </div>
+
+          <div class="calc-btn-wrapper">
+            <button type="button" id="calcBtn">✦ Haritayı Hesapla</button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Sonuçlar -->
+  <section id="results">
+
+    <!-- Özet -->
+    <div id="summaryBox"></div>
+
+    <!-- Harita + Bilgi -->
+    <div class="results-grid">
+      <div id="chartContainer"></div>
+      <div id="infoPanel"></div>
+    </div>
+
+    <!-- Yeniden Hesapla -->
+    <div class="recalc-wrapper">
+      <button id="recalcBtn">↺ Yeniden Hesapla</button>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>✦ Yağmur Elif Ülkü Sayesinde ✦</p>
+  </footer>
+
+  <!-- JavaScript Dosyaları -->
+  <script src="js/locations.js"></script>
+  <script src="js/astro-engine.js"></script>
+  <script src="js/chart-renderer.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,985 @@
+/* ============================================
+   COSMIC BIRTH CHART - ANA STİLLER
+   ============================================ */
+
+   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Crimson+Pro:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300&family=Space+Mono:wght@400;700&display=swap');
+
+   /* ============================================
+      CSS DEĞİŞKENLER
+      ============================================ */
+   :root {
+     --bg-deep: #04010f;
+     --bg-space: #080418;
+     --bg-card: rgba(12, 8, 35, 0.85);
+     --bg-card-hover: rgba(18, 12, 50, 0.92);
+     --border-glow: rgba(140, 120, 255, 0.2);
+     --border-glow-active: rgba(180, 160, 255, 0.4);
+     --text-primary: #e8e4f5;
+     --text-secondary: rgba(200, 190, 230, 0.7);
+     --text-muted: rgba(160, 150, 200, 0.5);
+     --accent-gold: #d4a854;
+     --accent-purple: #8a6cc7;
+     --accent-blue: #4a7fdb;
+     --accent-rose: #c76a8a;
+     --glow-purple: rgba(120, 80, 220, 0.15);
+     --glow-gold: rgba(212, 168, 84, 0.1);
+     --font-display: 'Cormorant Garamond', serif;
+     --font-body: 'Crimson Pro', serif;
+     --font-mono: 'Space Mono', monospace;
+     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+     --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+   }
+   
+   /* ============================================
+      RESET & BASE
+      ============================================ */
+   *, *::before, *::after {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+   }
+   
+   html {
+     scroll-behavior: smooth;
+     scrollbar-width: thin;
+     scrollbar-color: var(--accent-purple) var(--bg-deep);
+   }
+   
+   ::-webkit-scrollbar { width: 6px; }
+   ::-webkit-scrollbar-track { background: var(--bg-deep); }
+   ::-webkit-scrollbar-thumb {
+     background: var(--accent-purple);
+     border-radius: 3px;
+   }
+   
+   body {
+     background: var(--bg-deep);
+     color: var(--text-primary);
+     font-family: var(--font-body);
+     font-weight: 300;
+     line-height: 1.6;
+     min-height: 100vh;
+     overflow-x: hidden;
+     opacity: 0;
+     transition: opacity 0.8s var(--ease-smooth);
+   }
+   
+   body.loaded {
+     opacity: 1;
+   }
+   
+   /* ============================================
+      YILDIZ ARKAPLANI
+      ============================================ */
+   #starfield {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 300%;
+     z-index: 0;
+     pointer-events: none;
+     will-change: transform;
+   }
+   
+   #nebula {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     z-index: 0;
+     pointer-events: none;
+     overflow: hidden;
+   }
+   
+   .nebula-blob {
+     position: absolute;
+     border-radius: 50%;
+     filter: blur(80px);
+     animation: nebula-drift linear infinite;
+     will-change: transform;
+   }
+   
+   @keyframes nebula-drift {
+     0%, 100% { transform: translate(0, 0) scale(1); }
+     25% { transform: translate(30px, -20px) scale(1.1); }
+     50% { transform: translate(-20px, 30px) scale(0.9); }
+     75% { transform: translate(20px, 20px) scale(1.05); }
+   }
+   
+   /* ============================================
+      HERO BÖLÜMÜ
+      ============================================ */
+   #hero {
+     position: relative;
+     z-index: 1;
+     min-height: 100vh;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     padding: 2rem;
+   }
+   
+   .hero-content {
+     text-align: center;
+     margin-bottom: 3rem;
+     animation: fadeInUp 1.2s var(--ease-out-expo) forwards;
+     opacity: 0;
+   }
+   
+   @keyframes fadeInUp {
+     from { opacity: 0; transform: translateY(40px); }
+     to { opacity: 1; transform: translateY(0); }
+   }
+   
+   .site-title {
+     font-family: var(--font-display);
+     font-weight: 300;
+     font-size: clamp(2.2rem, 6vw, 4.5rem);
+     letter-spacing: 0.08em;
+     color: var(--text-primary);
+     margin-bottom: 0.3em;
+     text-shadow: 0 0 40px rgba(140, 120, 255, 0.3), 0 0 80px rgba(140, 120, 255, 0.1);
+     line-height: 1.1;
+   }
+   
+   .site-title .accent {
+     color: var(--accent-gold);
+     font-style: italic;
+     font-weight: 400;
+   }
+   
+   .site-subtitle {
+     font-family: var(--font-display);
+     font-weight: 300;
+     font-size: clamp(0.9rem, 2vw, 1.2rem);
+     color: var(--text-secondary);
+     letter-spacing: 0.3em;
+     text-transform: uppercase;
+     margin-top: 0.5em;
+   }
+   
+   /* Dekoratif astrolojik çizgi */
+   .hero-ornament {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 1rem;
+     margin: 1.5rem 0;
+     color: var(--text-muted);
+     font-size: 1.2rem;
+     animation: fadeInUp 1.2s var(--ease-out-expo) 0.3s forwards;
+     opacity: 0;
+   }
+   
+   .hero-ornament .line {
+     width: 60px;
+     height: 1px;
+     background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+   }
+   
+   /* ============================================
+      FORM KARTI
+      ============================================ */
+   #formCard {
+     position: relative;
+     z-index: 2;
+     width: 100%;
+     max-width: 580px;
+     background: var(--bg-card);
+     border: 1px solid var(--border-glow);
+     border-radius: 20px;
+     padding: 2.5rem;
+     backdrop-filter: blur(20px);
+     -webkit-backdrop-filter: blur(20px);
+     box-shadow:
+       0 0 0 1px rgba(140, 120, 255, 0.05),
+       0 20px 60px rgba(0, 0, 0, 0.5),
+       inset 0 1px 0 rgba(255, 255, 255, 0.03);
+     animation: fadeInUp 1.2s var(--ease-out-expo) 0.5s forwards;
+     opacity: 0;
+     transition: all 0.6s var(--ease-out-expo);
+   }
+   
+   #formCard.minimized {
+     max-width: 480px;
+     padding: 1.5rem 2rem;
+     margin-bottom: 2rem;
+   }
+   
+   #formCard::before {
+     content: '';
+     position: absolute;
+     top: -1px;
+     left: 20%;
+     right: 20%;
+     height: 1px;
+     background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+     opacity: 0.5;
+   }
+   
+   .form-title {
+     font-family: var(--font-display);
+     font-weight: 400;
+     font-size: 1.5rem;
+     text-align: center;
+     margin-bottom: 2rem;
+     color: var(--text-primary);
+     letter-spacing: 0.05em;
+   }
+   
+   .form-grid {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.2rem;
+   }
+   
+   .form-group {
+     display: flex;
+     flex-direction: column;
+     gap: 0.4rem;
+   }
+   
+   .form-group.full-width {
+     grid-column: 1 / -1;
+   }
+   
+   .form-group label {
+     font-family: var(--font-display);
+     font-size: 0.85rem;
+     color: var(--text-secondary);
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+   }
+   
+   .form-group select,
+   .form-group input {
+     background: rgba(20, 15, 50, 0.6);
+     border: 1px solid rgba(140, 120, 255, 0.15);
+     border-radius: 10px;
+     padding: 0.75rem 1rem;
+     color: var(--text-primary);
+     font-family: var(--font-body);
+     font-size: 1rem;
+     transition: all 0.3s var(--ease-smooth);
+     outline: none;
+     -webkit-appearance: none;
+     appearance: none;
+   }
+   
+   .form-group select {
+     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238a6cc7' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+     background-repeat: no-repeat;
+     background-position: right 12px center;
+     padding-right: 2.5rem;
+     cursor: pointer;
+   }
+   
+   .form-group select:disabled {
+     opacity: 0.4;
+     cursor: not-allowed;
+   }
+   
+   .form-group input:focus,
+   .form-group select:focus {
+     border-color: var(--accent-purple);
+     box-shadow: 0 0 20px rgba(138, 108, 199, 0.15), inset 0 0 10px rgba(138, 108, 199, 0.05);
+   }
+   
+   .form-group input::placeholder {
+     color: var(--text-muted);
+   }
+   
+   /* Tarih ve saat input özel stiller */
+   input[type="date"],
+   input[type="time"] {
+     color-scheme: dark;
+   }
+   
+   input[type="date"]::-webkit-calendar-picker-indicator,
+   input[type="time"]::-webkit-calendar-picker-indicator {
+     filter: invert(0.7) sepia(0.5) hue-rotate(220deg);
+     cursor: pointer;
+   }
+   
+   /* ============================================
+      HESAPLA BUTONU
+      ============================================ */
+   .calc-btn-wrapper {
+     grid-column: 1 / -1;
+     display: flex;
+     justify-content: center;
+     margin-top: 0.8rem;
+   }
+   
+   #calcBtn {
+     position: relative;
+     background: linear-gradient(135deg, rgba(138, 108, 199, 0.3), rgba(74, 127, 219, 0.3));
+     border: 1px solid rgba(140, 120, 255, 0.3);
+     border-radius: 14px;
+     padding: 0.9rem 3rem;
+     color: var(--text-primary);
+     font-family: var(--font-display);
+     font-size: 1.1rem;
+     font-weight: 500;
+     letter-spacing: 0.15em;
+     cursor: pointer;
+     transition: all 0.4s var(--ease-smooth);
+     overflow: hidden;
+     text-transform: uppercase;
+   }
+   
+   #calcBtn::before {
+     content: '';
+     position: absolute;
+     top: 0; left: -100%;
+     width: 100%; height: 100%;
+     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+     transition: left 0.6s var(--ease-smooth);
+   }
+   
+   #calcBtn:hover {
+     border-color: var(--accent-gold);
+     box-shadow: 0 0 30px rgba(212, 168, 84, 0.15), 0 0 60px rgba(138, 108, 199, 0.1);
+     transform: translateY(-2px);
+   }
+   
+   #calcBtn:hover::before {
+     left: 100%;
+   }
+   
+   #calcBtn:active,
+   #calcBtn.clicked {
+     transform: translateY(0) scale(0.97);
+   }
+   
+   /* ============================================
+      SONUÇLAR BÖLÜMÜ
+      ============================================ */
+   #results {
+     position: relative;
+     z-index: 1;
+     padding: 2rem;
+     max-width: 1200px;
+     margin: 0 auto;
+     opacity: 0;
+     transform: translateY(40px);
+     pointer-events: none;
+     transition: all 0.8s var(--ease-out-expo);
+   }
+   
+   #results.visible {
+     opacity: 1;
+     transform: translateY(0);
+     pointer-events: all;
+   }
+   
+   /* Özet Kutusu */
+   #summaryBox {
+     opacity: 0;
+     transform: translateY(20px);
+     transition: all 0.6s var(--ease-out-expo) 0.3s;
+     margin-bottom: 2.5rem;
+   }
+   
+   #summaryBox.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+   
+   .summary-inner {
+     background: var(--bg-card);
+     border: 1px solid var(--border-glow);
+     border-radius: 20px;
+     padding: 2rem;
+     backdrop-filter: blur(20px);
+     text-align: center;
+   }
+   
+   .summary-trinity {
+     display: flex;
+     justify-content: center;
+     gap: 3rem;
+     flex-wrap: wrap;
+   }
+   
+   .trinity-item {
+     min-width: 140px;
+   }
+   
+   .trinity-symbol {
+     font-size: 2rem;
+     margin-bottom: 0.3rem;
+     text-shadow: 0 0 20px currentColor;
+   }
+   
+   .trinity-label {
+     font-family: var(--font-display);
+     font-size: 0.75rem;
+     text-transform: uppercase;
+     letter-spacing: 0.2em;
+     color: var(--text-muted);
+     margin-bottom: 0.2rem;
+   }
+   
+   .trinity-value {
+     font-family: var(--font-display);
+     font-size: 1.4rem;
+     font-weight: 500;
+     letter-spacing: 0.05em;
+   }
+   
+   .trinity-degree {
+     font-family: var(--font-mono);
+     font-size: 0.75rem;
+     color: var(--text-muted);
+     margin-top: 0.2rem;
+   }
+   
+   .summary-meta {
+     margin-top: 1.5rem;
+     padding-top: 1rem;
+     border-top: 1px solid rgba(140, 120, 255, 0.1);
+     display: flex;
+     justify-content: center;
+     gap: 2rem;
+     font-family: var(--font-mono);
+     font-size: 0.75rem;
+     color: var(--text-muted);
+   }
+   
+   /* ============================================
+      HARİTA VE BİLGİ PANELİ LAYOUT
+      ============================================ */
+   .results-grid {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 2.5rem;
+     align-items: start;
+   }
+   
+   @media (max-width: 900px) {
+     .results-grid {
+       grid-template-columns: 1fr;
+     }
+   }
+   
+   /* Harita Container */
+   #chartContainer {
+     position: relative;
+     background: var(--bg-card);
+     border: 1px solid var(--border-glow);
+     border-radius: 20px;
+     padding: 1.5rem;
+     backdrop-filter: blur(20px);
+     box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+     animation: chartReveal 1s var(--ease-out-expo) 0.5s both;
+   }
+   
+   @keyframes chartReveal {
+     from { opacity: 0; transform: scale(0.9) rotate(-5deg); }
+     to { opacity: 1; transform: scale(1) rotate(0); }
+   }
+   
+   .natal-chart-svg {
+     width: 100%;
+     height: auto;
+     display: block;
+   }
+   
+   /* ============================================
+      BİLGİ PANELİ
+      ============================================ */
+   #infoPanel {
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+   }
+   
+   .info-section {
+     background: var(--bg-card);
+     border: 1px solid var(--border-glow);
+     border-radius: 16px;
+     padding: 1.5rem;
+     backdrop-filter: blur(20px);
+     animation: sectionSlideIn 0.6s var(--ease-out-expo) both;
+   }
+   
+   .info-section:nth-child(1) { animation-delay: 0.6s; }
+   .info-section:nth-child(2) { animation-delay: 0.75s; }
+   .info-section:nth-child(3) { animation-delay: 0.9s; }
+   .info-section:nth-child(4) { animation-delay: 1.05s; }
+   
+   @keyframes sectionSlideIn {
+     from { opacity: 0; transform: translateX(30px); }
+     to { opacity: 1; transform: translateX(0); }
+   }
+   
+   .section-title {
+     font-family: var(--font-display);
+     font-weight: 400;
+     font-size: 1.15rem;
+     color: var(--accent-gold);
+     letter-spacing: 0.08em;
+     margin-bottom: 1rem;
+     padding-bottom: 0.6rem;
+     border-bottom: 1px solid rgba(212, 168, 84, 0.15);
+   }
+   
+   /* Gezegen Tablosu */
+   .planet-table {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3rem;
+   }
+   
+   .planet-row {
+     display: grid;
+     grid-template-columns: 30px 1fr 1fr 80px 55px;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.5rem 0.3rem;
+     border-radius: 8px;
+     transition: background 0.2s;
+     animation: rowFadeIn 0.4s var(--ease-out-expo) both;
+   }
+   
+   .planet-row:hover {
+     background: rgba(140, 120, 255, 0.06);
+   }
+   
+   .angle-row {
+     background: rgba(212, 168, 84, 0.05);
+     border: 1px solid rgba(212, 168, 84, 0.1);
+     border-radius: 8px;
+     margin-bottom: 0.5rem;
+   }
+   
+   @keyframes rowFadeIn {
+     from { opacity: 0; transform: translateX(10px); }
+     to { opacity: 1; transform: translateX(0); }
+   }
+   
+   .planet-icon {
+     font-size: 1.2rem;
+     text-align: center;
+     text-shadow: 0 0 10px currentColor;
+   }
+   
+   .planet-name {
+     font-family: var(--font-display);
+     font-size: 0.9rem;
+     color: var(--text-primary);
+   }
+   
+   .planet-sign {
+     font-family: var(--font-display);
+     font-size: 0.9rem;
+   }
+   
+   .planet-degree {
+     font-family: var(--font-mono);
+     font-size: 0.7rem;
+     color: var(--text-secondary);
+   }
+   
+   .planet-house {
+     font-family: var(--font-mono);
+     font-size: 0.7rem;
+     color: var(--text-muted);
+     text-align: right;
+   }
+   
+   /* Ev Grid */
+   .house-grid {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     gap: 0.5rem;
+   }
+   
+   .house-item {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 0.15rem;
+     padding: 0.5rem;
+     background: rgba(20, 15, 50, 0.4);
+     border-radius: 10px;
+     border: 1px solid rgba(140, 120, 255, 0.08);
+     transition: all 0.3s;
+     animation: rowFadeIn 0.4s var(--ease-out-expo) both;
+   }
+   
+   .house-item:hover {
+     border-color: var(--border-glow-active);
+     background: rgba(140, 120, 255, 0.06);
+   }
+   
+   .house-num {
+     font-family: var(--font-display);
+     font-size: 0.75rem;
+     color: var(--text-muted);
+     letter-spacing: 0.1em;
+   }
+   
+   .house-sign {
+     font-size: 1.1rem;
+   }
+   
+   .house-deg {
+     font-family: var(--font-mono);
+     font-size: 0.65rem;
+     color: var(--text-secondary);
+   }
+   
+   /* Açılar (Aspects) */
+   .aspect-list {
+     display: flex;
+     flex-direction: column;
+     gap: 0.2rem;
+     max-height: 350px;
+     overflow-y: auto;
+     scrollbar-width: thin;
+     scrollbar-color: var(--accent-purple) transparent;
+   }
+   
+   .aspect-category {
+     font-family: var(--font-display);
+     font-size: 0.8rem;
+     color: var(--accent-purple);
+     letter-spacing: 0.1em;
+     text-transform: uppercase;
+     margin: 0.6rem 0 0.3rem;
+     padding-bottom: 0.2rem;
+     border-bottom: 1px solid rgba(140, 120, 255, 0.1);
+   }
+   
+   .aspect-row {
+     display: flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.35rem 0.3rem;
+     border-radius: 6px;
+     transition: background 0.2s;
+     animation: rowFadeIn 0.3s var(--ease-out-expo) both;
+   }
+   
+   .aspect-row:hover {
+     background: rgba(140, 120, 255, 0.06);
+   }
+   
+   .aspect-planet {
+     font-size: 1rem;
+     text-shadow: 0 0 8px currentColor;
+     width: 20px;
+     text-align: center;
+   }
+   
+   .aspect-symbol {
+     font-size: 0.9rem;
+     width: 20px;
+     text-align: center;
+   }
+   
+   .aspect-name {
+     font-family: var(--font-display);
+     font-size: 0.8rem;
+     color: var(--text-secondary);
+     flex: 1;
+   }
+   
+   .aspect-orb {
+     font-family: var(--font-mono);
+     font-size: 0.65rem;
+     padding: 0.15rem 0.4rem;
+     border-radius: 4px;
+     background: rgba(20, 15, 50, 0.5);
+   }
+   
+   .aspect-orb.strong { color: #4CAF50; border: 1px solid rgba(76, 175, 80, 0.2); }
+   .aspect-orb.medium { color: #FFC107; border: 1px solid rgba(255, 193, 7, 0.2); }
+   .aspect-orb.weak { color: #9E9E9E; border: 1px solid rgba(158, 158, 158, 0.2); }
+   
+   /* Analiz */
+   .analysis-content {
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+   }
+   
+   .analysis-group h4 {
+     font-family: var(--font-display);
+     font-weight: 400;
+     font-size: 0.85rem;
+     color: var(--text-secondary);
+     letter-spacing: 0.08em;
+     margin-bottom: 0.6rem;
+   }
+   
+   .analysis-bar-wrapper {
+     display: flex;
+     align-items: center;
+     gap: 0.7rem;
+     margin-bottom: 0.4rem;
+   }
+   
+   .analysis-label {
+     font-family: var(--font-display);
+     font-size: 0.8rem;
+     color: var(--text-secondary);
+     width: 75px;
+     text-align: right;
+   }
+   
+   .analysis-bar {
+     flex: 1;
+     height: 6px;
+     background: rgba(20, 15, 50, 0.5);
+     border-radius: 3px;
+     overflow: hidden;
+   }
+   
+   .analysis-bar-fill {
+     height: 100%;
+     border-radius: 3px;
+     width: 0%;
+     animation: barGrow 1s var(--ease-out-expo) forwards;
+     box-shadow: 0 0 10px currentColor;
+   }
+   
+   @keyframes barGrow {
+     from { width: 0%; }
+   }
+   
+   .analysis-value {
+     font-family: var(--font-mono);
+     font-size: 0.7rem;
+     color: var(--text-muted);
+     width: 35px;
+   }
+   
+   /* ============================================
+      YENİDEN HESAPLA BUTONU
+      ============================================ */
+   .recalc-wrapper {
+     text-align: center;
+     margin-top: 2.5rem;
+     padding-bottom: 3rem;
+   }
+   
+   #recalcBtn {
+     background: transparent;
+     border: 1px solid rgba(140, 120, 255, 0.2);
+     border-radius: 10px;
+     padding: 0.7rem 2rem;
+     color: var(--text-secondary);
+     font-family: var(--font-display);
+     font-size: 0.9rem;
+     letter-spacing: 0.1em;
+     cursor: pointer;
+     transition: all 0.3s;
+   }
+   
+   #recalcBtn:hover {
+     border-color: var(--accent-purple);
+     color: var(--text-primary);
+     box-shadow: 0 0 20px rgba(138, 108, 199, 0.15);
+   }
+   
+   /* ============================================
+      HATA TOAST
+      ============================================ */
+   .error-toast {
+     position: fixed;
+     bottom: 2rem;
+     left: 50%;
+     transform: translateX(-50%) translateY(20px);
+     background: rgba(180, 40, 40, 0.9);
+     border: 1px solid rgba(255, 80, 80, 0.3);
+     border-radius: 12px;
+     padding: 0.8rem 1.5rem;
+     color: #fff;
+     font-family: var(--font-body);
+     font-size: 0.9rem;
+     z-index: 1000;
+     backdrop-filter: blur(10px);
+     opacity: 0;
+     transition: all 0.3s var(--ease-smooth);
+   }
+   
+   .error-toast.show {
+     opacity: 1;
+     transform: translateX(-50%) translateY(0);
+   }
+   
+   /* ============================================
+      KUTLAMA PARTİKÜLLERİ
+      ============================================ */
+   .celebration-particles {
+     position: fixed;
+     top: 0; left: 0;
+     width: 100%; height: 100%;
+     pointer-events: none;
+     z-index: 100;
+   }
+   
+   .c-particle {
+     position: absolute;
+     width: 4px;
+     height: 4px;
+     border-radius: 50%;
+     animation: particleBurst 1.5s var(--ease-out-expo) forwards;
+   }
+   
+   @keyframes particleBurst {
+     0% { transform: translate(0, 0) scale(1); opacity: 1; }
+     100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+   }
+   
+   /* ============================================
+      SVG ANİMASYONLARI
+      ============================================ */
+   .sign-symbol {
+     opacity: 0;
+     animation: signAppear 0.5s var(--ease-out-expo) forwards;
+   }
+   
+   @keyframes signAppear {
+     from { opacity: 0; transform: scale(0.5); }
+     to { opacity: 1; transform: scale(1); }
+   }
+   
+   .planet-symbol, .planet-dot {
+     opacity: 0;
+     animation: planetAppear 0.6s var(--ease-out-expo) forwards;
+   }
+   
+   @keyframes planetAppear {
+     from { opacity: 0; transform: scale(0) rotate(180deg); }
+     to { opacity: 1; transform: scale(1) rotate(0deg); }
+   }
+   
+   .aspect-line {
+     opacity: 0;
+     animation: aspectAppear 0.4s var(--ease-smooth) forwards;
+   }
+   
+   @keyframes aspectAppear {
+     from { opacity: 0; }
+     to { opacity: 1; }
+   }
+   
+   .angle-label {
+     animation: labelPulse 3s ease-in-out infinite;
+   }
+   
+   @keyframes labelPulse {
+     0%, 100% { opacity: 0.8; }
+     50% { opacity: 1; }
+   }
+   
+   /* Harita çemberlerinin çizilme animasyonu (sadece stroke'lu) */
+   .natal-chart-svg circle[fill="none"] {
+     stroke-dasharray: 2000;
+     stroke-dashoffset: 2000;
+     animation: drawCircle 2s var(--ease-out-expo) forwards;
+   }
+   
+   .natal-chart-svg.rendered circle[fill="none"] {
+     stroke-dashoffset: 0;
+   }
+   
+   @keyframes drawCircle {
+     to { stroke-dashoffset: 0; }
+   }
+   
+   /* Gezegen sembolü hover */
+   .planet-symbol:hover {
+     filter: url(#glow-strong) !important;
+     cursor: pointer;
+     font-size: 19px;
+   }
+   
+   /* Aspect line hover */
+   .aspect-line:hover {
+     stroke-opacity: 0.8 !important;
+     stroke-width: 2 !important;
+   }
+   
+   /* ============================================
+      FOOTER
+      ============================================ */
+   footer {
+     position: relative;
+     z-index: 1;
+     text-align: center;
+     padding: 2rem;
+     font-family: var(--font-display);
+     font-size: 0.8rem;
+     color: var(--text-muted);
+     letter-spacing: 0.1em;
+   }
+   
+   footer a {
+     color: var(--accent-purple);
+     text-decoration: none;
+   }
+   
+   /* ============================================
+      MOBİL UYUMLULUK
+      ============================================ */
+   @media (max-width: 768px) {
+     #formCard {
+       padding: 1.8rem;
+       margin: 0 1rem;
+     }
+   
+     .form-grid {
+       grid-template-columns: 1fr;
+       gap: 1rem;
+     }
+   
+     #results {
+       padding: 1rem;
+     }
+   
+     .summary-trinity {
+       gap: 1.5rem;
+     }
+   
+     .planet-row {
+       grid-template-columns: 26px 1fr 1fr 65px;
+       font-size: 0.85rem;
+     }
+   
+     .planet-house {
+       display: none;
+     }
+   
+     .house-grid {
+       grid-template-columns: repeat(3, 1fr);
+     }
+   
+     .summary-meta {
+       flex-direction: column;
+       gap: 0.3rem;
+     }
+   }
+   
+   @media (max-width: 480px) {
+     .site-title {
+       font-size: 2rem;
+     }
+   
+     .summary-trinity {
+       flex-direction: column;
+       gap: 1rem;
+     }
+   
+     .house-grid {
+       grid-template-columns: repeat(2, 1fr);
+     }
+   }
+   

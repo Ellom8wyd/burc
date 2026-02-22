@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Burç uyumu hesaplayıcı - İki kişinin doğum haritası karşılaştırması ve ilişki analizi">
+  <title>Kozmik Harita — Burç Uyumu</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♡</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="starfield"></canvas>
+  <div id="nebula"></div>
+
+  <!-- NAVİGASYON -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-link">☉ Doğum Haritası</a>
+    <a href="synastry.html" class="nav-link active">♡ Burç Uyumu</a>
+  </nav>
+
+  <!-- FORM BÖLÜMÜ -->
+  <section id="synFormSection" class="syn-form-section">
+    <div class="hero-content">
+      <h1 class="site-title">Kozmik <span class="accent">Uyum</span></h1>
+      <div class="hero-ornament">
+        <span class="line"></span>
+        <span>♀ ☌ ♂</span>
+        <span class="line"></span>
+      </div>
+      <p class="site-subtitle">İki Harita, Bir Bağlantı</p>
+    </div>
+
+    <div class="syn-forms-wrapper">
+      <!-- Kişi 1 -->
+      <div class="syn-person-card" id="personCard1">
+        <div class="syn-person-header">
+          <span class="syn-person-num">I</span>
+          <input type="text" id="p1Name" class="syn-name-input" placeholder="İsim (opsiyonel)">
+        </div>
+        <div class="syn-person-fields">
+          <div class="form-group full-width">
+            <label>Doğum Tarihi</label>
+            <div class="date-inputs">
+              <input type="number" id="p1Day" min="1" max="31" placeholder="GG" required>
+              <span class="date-sep">/</span>
+              <input type="number" id="p1Month" min="1" max="12" placeholder="AA" required>
+              <span class="date-sep">/</span>
+              <input type="number" id="p1Year" min="1900" max="2030" placeholder="YYYY" required>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>Doğum Saati (24 saat)</label>
+            <div class="time-inputs">
+              <input type="number" id="p1Hour" min="0" max="23" placeholder="SS" required>
+              <span class="date-sep">:</span>
+              <input type="number" id="p1Minute" min="0" max="59" placeholder="DD" required>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>İl</label>
+            <select id="p1City" required><option value="">İl Seçin</option></select>
+          </div>
+          <div class="form-group full-width">
+            <label>İlçe</label>
+            <select id="p1District" disabled><option value="">İlçe (opsiyonel)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orta dekorasyon -->
+      <div class="syn-heart-divider">
+        <span>♡</span>
+      </div>
+
+      <!-- Kişi 2 -->
+      <div class="syn-person-card" id="personCard2">
+        <div class="syn-person-header">
+          <span class="syn-person-num">II</span>
+          <input type="text" id="p2Name" class="syn-name-input" placeholder="İsim (opsiyonel)">
+        </div>
+        <div class="syn-person-fields">
+          <div class="form-group full-width">
+            <label>Doğum Tarihi</label>
+            <div class="date-inputs">
+              <input type="number" id="p2Day" min="1" max="31" placeholder="GG" required>
+              <span class="date-sep">/</span>
+              <input type="number" id="p2Month" min="1" max="12" placeholder="AA" required>
+              <span class="date-sep">/</span>
+              <input type="number" id="p2Year" min="1900" max="2030" placeholder="YYYY" required>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>Doğum Saati (24 saat)</label>
+            <div class="time-inputs">
+              <input type="number" id="p2Hour" min="0" max="23" placeholder="SS" required>
+              <span class="date-sep">:</span>
+              <input type="number" id="p2Minute" min="0" max="59" placeholder="DD" required>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label>İl</label>
+            <select id="p2City" required><option value="">İl Seçin</option></select>
+          </div>
+          <div class="form-group full-width">
+            <label>İlçe</label>
+            <select id="p2District" disabled><option value="">İlçe (opsiyonel)</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hesapla -->
+    <div class="syn-calc-wrapper">
+      <button type="button" id="synCalcBtn">♡ Uyumu Hesapla</button>
+    </div>
+  </section>
+
+  <!-- Sonuçlar -->
+  <section id="synResults"></section>
+
+  <!-- Footer -->
+  <footer>
+    <p>✦ Kozmik Harita — Astrolojik uyum analizi ✦</p>
+  </footer>
+
+  <script src="js/locations.js"></script>
+  <script src="js/astro-engine.js"></script>
+  <script src="js/synastry-engine.js"></script>
+  <script src="js/synastry-app.js"></script>
+
+</body>
+</html>
